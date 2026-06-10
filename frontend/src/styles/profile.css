@@ -1,0 +1,291 @@
+/* =============================================
+   PHASE 2 — Profile Setup Styles
+   ============================================= */
+
+.profile-setup-page {
+  display: flex;
+  min-height: 100vh;
+  background: #0f1117;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---- Sidebar ---- */
+.profile-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: #1a1d27;
+  border-right: 1px solid #2d3148;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ---- Completion Meter ---- */
+.completion-meter { padding: 16px; background: #22263a; border-radius: 12px; }
+.completion-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; }
+.meter-track { height: 6px; background: #2d3148; border-radius: 999px; overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+.completion-hint { margin-top: 8px; font-size: 12px; color: #7c8ba1; }
+
+/* ---- Step Nav ---- */
+.step-nav { display: flex; flex-direction: column; gap: 4px; }
+.step-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; border-radius: 8px;
+  background: none; border: none; color: #7c8ba1;
+  font-size: 14px; cursor: pointer; text-align: left;
+  transition: all 0.2s;
+}
+.step-btn:hover { background: #22263a; color: #e2e8f0; }
+.step-btn.active { background: #3b4fd8; color: #fff; font-weight: 600; }
+.step-btn.done { color: #22c55e; }
+.step-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #2d3148; display: flex; align-items: center;
+  justify-content: center; font-size: 12px; flex-shrink: 0;
+}
+.step-btn.active .step-num { background: rgba(255,255,255,0.2); }
+
+/* ---- Visibility Toggle ---- */
+.visibility-toggle { padding: 16px; background: #22263a; border-radius: 12px; }
+.visibility-toggle label { font-size: 12px; color: #7c8ba1; text-transform: uppercase; letter-spacing: 0.5px; }
+.toggle-row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; }
+.toggle-btn {
+  padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 500;
+}
+.toggle-btn.on { background: #166534; color: #86efac; }
+.toggle-btn.off { background: #450a0a; color: #fca5a5; }
+.visibility-note { font-size: 12px; color: #7c8ba1; margin: 0; }
+
+/* ---- Main Area ---- */
+.profile-main { flex: 1; padding: 40px; max-width: 800px; }
+.step-header { margin-bottom: 32px; }
+.step-header h1 { font-size: 28px; font-weight: 700; color: #fff; margin: 0; }
+.step-header p { font-size: 14px; color: #7c8ba1; margin: 4px 0 0; }
+.step-hint { color: #7c8ba1; font-size: 14px; margin-bottom: 16px; }
+
+/* ---- Form Groups ---- */
+.form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.form-group label { font-size: 13px; color: #94a3b8; font-weight: 500; }
+.form-group input, .form-group textarea, .form-group select {
+  background: #1a1d27; border: 1px solid #2d3148;
+  color: #e2e8f0; border-radius: 8px; padding: 10px 14px;
+  font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group textarea:focus {
+  border-color: #3b4fd8;
+}
+.form-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+.checkbox-group { flex-direction: row; align-items: center; }
+.checkbox-group input[type="checkbox"] { width: 16px; height: 16px; margin-right: 8px; }
+
+/* ---- Entry Cards ---- */
+.entry-card {
+  background: #1a1d27; border: 1px solid #2d3148;
+  border-radius: 12px; padding: 20px; margin-bottom: 20px;
+}
+.entry-card h3 { font-size: 15px; font-weight: 600; color: #fff; margin: 0 0 16px; }
+
+/* ---- Skills Input ---- */
+.skills-input-container { margin-bottom: 32px; }
+.skills-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.skill-tag {
+  display: flex; align-items: center; gap: 6px;
+  background: #1e3a5f; color: #60a5fa;
+  padding: 6px 12px; border-radius: 999px; font-size: 13px;
+}
+.remove-skill {
+  background: none; border: none; color: #60a5fa;
+  cursor: pointer; font-size: 16px; line-height: 1; padding: 0;
+}
+.autocomplete-wrapper { position: relative; }
+.skill-input {
+  width: 100%; background: #1a1d27; border: 1px solid #2d3148;
+  color: #e2e8f0; border-radius: 8px; padding: 10px 14px;
+  font-size: 14px; outline: none; box-sizing: border-box;
+}
+.skill-input:focus { border-color: #3b4fd8; }
+.suggestions-list {
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: #1a1d27; border: 1px solid #2d3148;
+  border-radius: 8px; list-style: none; margin: 4px 0 0;
+  padding: 4px; z-index: 10; max-height: 180px; overflow-y: auto;
+}
+.suggestion-item {
+  padding: 8px 12px; border-radius: 6px;
+  cursor: pointer; font-size: 14px; color: #e2e8f0;
+}
+.suggestion-item:hover { background: #22263a; }
+
+/* ---- Resume Upload ---- */
+.resume-upload { margin-top: 32px; }
+.resume-upload h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+.resume-dropzone {
+  border: 2px dashed #2d3148; border-radius: 12px;
+  padding: 40px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.resume-dropzone:hover { border-color: #3b4fd8; }
+.resume-dropzone span { font-size: 32px; display: block; margin-bottom: 8px; }
+.resume-dropzone p { color: #7c8ba1; font-size: 14px; margin: 0; }
+.resume-current { display: flex; align-items: center; gap: 12px; padding: 12px; background: #1a1d27; border-radius: 8px; }
+.resume-current a { color: #60a5fa; text-decoration: none; flex: 1; }
+.upload-status { color: #7c8ba1; font-size: 13px; margin-top: 8px; }
+.upload-message { font-size: 13px; margin-top: 8px; }
+.upload-message.success { color: #22c55e; }
+.upload-message.error { color: #ef4444; }
+
+/* ---- Action Buttons ---- */
+.step-actions {
+  display: flex; gap: 12px; align-items: center;
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid #2d3148;
+}
+.btn-primary {
+  padding: 10px 24px; background: #3b4fd8; color: #fff;
+  border: none; border-radius: 8px; font-size: 14px;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.btn-primary:hover { background: #4c5ef0; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary {
+  padding: 10px 20px; background: #1a1d27; color: #94a3b8;
+  border: 1px solid #2d3148; border-radius: 8px; font-size: 14px;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: #4c5ef0; color: #e2e8f0; }
+.btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-save-draft {
+  padding: 10px 20px; background: none; color: #60a5fa;
+  border: 1px solid #1e3a5f; border-radius: 8px; font-size: 14px;
+  cursor: pointer; margin-left: auto;
+}
+.btn-save-draft:hover { background: #1e3a5f; }
+.btn-add {
+  background: none; border: 1px dashed #2d3148; color: #7c8ba1;
+  border-radius: 8px; padding: 10px 20px; cursor: pointer;
+  font-size: 14px; width: 100%; transition: all 0.2s;
+}
+.btn-add:hover { border-color: #3b4fd8; color: #60a5fa; }
+
+/* ---- Toast ---- */
+.toast {
+  position: fixed; bottom: 32px; right: 32px;
+  background: #22c55e; color: #fff; padding: 12px 24px;
+  border-radius: 8px; font-size: 14px; font-weight: 500;
+  animation: slideIn 0.3s ease; z-index: 100;
+}
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.profile-loading { display: flex; align-items: center; justify-content: center; min-height: 100vh; color: #7c8ba1; font-size: 16px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-setup-page { flex-direction: column; }
+  .profile-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #2d3148; padding: 20px; }
+  .profile-main { padding: 20px; }
+  .form-row { flex-direction: column; }
+}
+
+/* =============================================
+   ADDITIONS — Validation & improved meter
+   ============================================= */
+
+/* Required / optional labels */
+.required { color: #ef4444; margin-left: 2px; }
+.optional { color: #7c8ba1; font-size: 11px; font-weight: 400; }
+
+/* Error banner at top of step */
+.error-banner {
+  background: #450a0a;
+  border: 1px solid #7f1d1d;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+.error-banner p {
+  color: #fca5a5;
+  font-size: 13px;
+  margin: 2px 0;
+}
+
+/* Field-level red border + inline message */
+.form-group.has-error input,
+.form-group.has-error textarea,
+.form-group.has-error select {
+  border-color: #ef4444 !important;
+  background: #1f0808;
+}
+.field-error {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 2px;
+  display: block;
+}
+.skills-error-wrap {
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  padding: 12px;
+  background: #1f0808;
+}
+
+/* Locked steps in sidebar */
+.step-btn.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.step-lock { margin-left: auto; font-size: 11px; }
+
+/* Entry card header (with remove button) */
+.entry-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.entry-card-header h3 { margin: 0; }
+.btn-remove {
+  background: none;
+  border: 1px solid #7f1d1d;
+  color: #f87171;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-remove:hover { background: #450a0a; }
+
+/* Toast variants */
+.toast { background: #22c55e; }
+.toast-error { background: #dc2626 !important; }
+.toast-success { background: #22c55e; }
+
+/* ── Improved Completion Meter ── */
+.completion-meter { position: relative; padding: 16px; background: #22263a; border-radius: 12px; transition: background 0.4s; }
+.meter-complete { background: #052e16; border: 1px solid #166534; }
+.completion-pct { font-weight: 700; font-size: 15px; transition: color 0.4s; }
+
+/* Step markers above the track */
+.meter-markers {
+  position: relative;
+  height: 8px;
+  margin-top: 4px;
+}
+.meter-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0f1117;
+  border: 2px solid #2d3148;
+  transition: border-color 0.3s;
+}
+.meter-mark.reached { border-color: inherit; background: #0f1117; }
+
+.completion-hint { margin-top: 10px; font-size: 12px; color: #7c8ba1; transition: color 0.4s; }
