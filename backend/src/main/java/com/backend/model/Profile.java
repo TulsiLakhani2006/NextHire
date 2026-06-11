@@ -20,8 +20,9 @@ public class Profile {
     private List<Experience> experience;
     private String preferredLocation;
     private Double salaryExpectation;
+    private String jobRole;
+    private Integer experienceYears;
     private String resumeUrl;        // S3 or GridFS URL
-    private boolean isPublic;        // visibility control
     private int completionPercent;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -91,10 +92,12 @@ public class Profile {
     public void setPreferredLocation(String preferredLocation) { this.preferredLocation = preferredLocation; }
     public Double getSalaryExpectation() { return salaryExpectation; }
     public void setSalaryExpectation(Double salaryExpectation) { this.salaryExpectation = salaryExpectation; }
+    public String getJobRole() { return jobRole; }
+    public void setJobRole(String jobRole) { this.jobRole = jobRole; }
+    public Integer getExperienceYears() { return experienceYears; }
+    public void setExperienceYears(Integer experienceYears) { this.experienceYears = experienceYears; }
     public String getResumeUrl() { return resumeUrl; }
     public void setResumeUrl(String resumeUrl) { this.resumeUrl = resumeUrl; }
-    public boolean isPublic() { return isPublic; }
-    public void setPublic(boolean aPublic) { isPublic = aPublic; }
     public int getCompletionPercent() { return completionPercent; }
     public void setCompletionPercent(int completionPercent) { this.completionPercent = completionPercent; }
     public LocalDateTime getCreatedAt() { return createdAt; }

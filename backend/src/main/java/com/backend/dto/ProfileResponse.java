@@ -15,8 +15,9 @@ public class ProfileResponse {
     private List<Profile.Experience> experience;
     private String preferredLocation;
     private Double salaryExpectation;
+    private String jobRole;
+    private Integer experienceYears;
     private String resumeUrl;
-    private boolean isPublic;
     private int completionPercent;
     private LocalDateTime updatedAt;
 
@@ -32,8 +33,9 @@ public class ProfileResponse {
         r.experience = p.getExperience();
         r.preferredLocation = p.getPreferredLocation();
         r.salaryExpectation = p.getSalaryExpectation();
+        r.jobRole = p.getJobRole();
+        r.experienceYears = p.getExperienceYears();
         r.resumeUrl = p.getResumeUrl();
-        r.isPublic = p.isPublic();
         r.completionPercent = p.getCompletionPercent();
         r.updatedAt = p.getUpdatedAt();
         return r;
@@ -49,8 +51,9 @@ public class ProfileResponse {
     public List<Profile.Experience> getExperience() { return experience; }
     public String getPreferredLocation() { return preferredLocation; }
     public Double getSalaryExpectation() { return salaryExpectation; }
+    public String getJobRole() { return jobRole; }
+    public Integer getExperienceYears() { return experienceYears; }
     public String getResumeUrl() { return resumeUrl; }
-    public boolean isPublic() { return isPublic; }
     public int getCompletionPercent() { return completionPercent; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

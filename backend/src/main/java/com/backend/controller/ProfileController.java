@@ -54,15 +54,6 @@ public class ProfileController {
         return ResponseEntity.ok(profileService.getPublicProfiles());
     }
 
-    // ---- PATCH /api/profile/visibility  — toggle public/private ----
-    @PatchMapping("/visibility")
-    @PreAuthorize("hasRole('CANDIDATE')")
-    public ResponseEntity<ProfileResponse> toggleVisibility(
-            @RequestHeader("Authorization") String auth) {
-        String userId = extractUserId(auth);
-        return ResponseEntity.ok(profileService.toggleVisibility(userId));
-    }
-
     // ---- POST /api/profile/resume  — upload PDF ----
     @PostMapping("/resume")
     @PreAuthorize("hasRole('CANDIDATE')")

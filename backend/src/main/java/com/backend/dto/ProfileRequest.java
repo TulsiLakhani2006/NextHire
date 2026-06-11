@@ -12,7 +12,8 @@ public class ProfileRequest {
     private List<Profile.Experience> experience;
     private String preferredLocation;
     private Double salaryExpectation;
-    private boolean isPublic;
+    private String jobRole;
+    private Integer experienceYears;
 
     // Getters & Setters
     public String getHeadline() { return headline; }
@@ -29,6 +30,8 @@ public class ProfileRequest {
     public void setPreferredLocation(String preferredLocation) { this.preferredLocation = preferredLocation; }
     public Double getSalaryExpectation() { return salaryExpectation; }
     public void setSalaryExpectation(Double salaryExpectation) { this.salaryExpectation = salaryExpectation; }
-    public boolean isPublic() { return isPublic; }
-    public void setPublic(boolean aPublic) { isPublic = aPublic; }
+    public String getJobRole() { return jobRole; }
+    public void setJobRole(String jobRole) { this.jobRole = jobRole; }
+    public Integer getExperienceYears() { return experienceYears; }
+    public void setExperienceYears(Integer experienceYears) { this.experienceYears = experienceYears; }
 }

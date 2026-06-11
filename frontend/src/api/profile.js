@@ -2,9 +2,15 @@ import axios from 'axios';
 
 const API_BASE = 'http://localhost:8080/api';
 
-const getAuthHeader = () => ({
-  headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-});
+const getAuthToken = () => {
+  const auth = localStorage.getItem('auth');
+  return auth ? JSON.parse(auth).token : null;
+};
+
+const getAuthHeader = () => {
+  const token = getAuthToken();
+  return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+};
 
 // Get logged-in candidate's profile
 export const getMyProfile = () =>
@@ -18,18 +24,15 @@ export const upsertProfile = (profileData) =>
 export const uploadResume = (file) => {
   const formData = new FormData();
   formData.append('file', file);
+  const config = getAuthHeader();
   return axios.post(`${API_BASE}/profile/resume`, formData, {
-    ...getAuthHeader(),
+    ...config,
     headers: {
-      ...getAuthHeader().headers,
+      ...config.headers,
       'Content-Type': 'multipart/form-data'
     }
   });
 };
-
-// Toggle public/private visibility
-export const toggleVisibility = () =>
-  axios.patch(`${API_BASE}/profile/visibility`, {}, getAuthHeader());
 
 // Get all public profiles (recruiter)
 export const getPublicProfiles = () =>

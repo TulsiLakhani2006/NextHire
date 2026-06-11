@@ -1,58 +1,95 @@
-import { useState, useEffect } from 'react';
-import { getMyProfile, upsertProfile, uploadResume, toggleVisibility } from '../api/profile';
+import { useState, useEffect, useCallback } from 'react';
+import { getMyProfile, upsertProfile, uploadResume } from '../api/profile';
 
 export const useProfile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchProfile = async () => {
+  // 🔹 Fetch Profile
+  const fetchProfile = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
+
       const res = await getMyProfile();
-      setProfile(res.data);
+      setProfile(res?.data || res);
+
     } catch (err) {
-      // 404 = no profile yet, that's fine
-      if (err.response?.status !== 404) setError(err.message);
+      console.error("Fetch Profile Error:", err);
+
+      if (err?.response?.status !== 404) {
+        setError(err.response?.data?.message || err.message);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  useEffect(() => { fetchProfile(); }, []);
+  // 🔹 Load on mount
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
+  // 🔹 Save / Update Profile
   const saveProfile = async (data) => {
     try {
       setSaving(true);
+      setError(null);
+
       const res = await upsertProfile(data);
-      setProfile(res.data);
+      setProfile(res?.data || res);
+
       return { success: true };
+
     } catch (err) {
-      return { success: false, message: err.response?.data?.message || 'Save failed' };
+      console.error("Save Profile Error:", err);
+
+      return {
+        success: false,
+        message: err.response?.data?.message || 'Save failed'
+      };
     } finally {
       setSaving(false);
     }
   };
 
+  // 🔹 Upload Resume
   const uploadResumeFile = async (file) => {
     try {
-      const res = await uploadResume(file);
-      setProfile(res.data);
+      setUploading(true);
+      setError(null);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await uploadResume(formData);
+      setProfile(res?.data || res);
+
       return { success: true };
+
     } catch (err) {
-      return { success: false, message: 'Resume upload failed' };
+      console.error("Upload Resume Error:", err);
+
+      return {
+        success: false,
+        message: err.response?.data?.message || 'Resume upload failed'
+      };
+    } finally {
+      setUploading(false);
     }
   };
 
-  const toggleProfileVisibility = async () => {
-    try {
-      const res = await toggleVisibility();
-      setProfile(res.data);
-    } catch (err) {
-      setError('Failed to update visibility');
-    }
+  return {
+    profile,
+    loading,
+    saving,
+    uploading,
+    error,
+    saveProfile,
+    uploadResumeFile,
+    refetch: fetchProfile
   };
-
-  return { profile, loading, saving, error, saveProfile, uploadResumeFile, toggleProfileVisibility, refetch: fetchProfile };
 };
