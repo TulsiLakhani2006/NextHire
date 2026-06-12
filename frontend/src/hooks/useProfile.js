@@ -30,8 +30,11 @@ export const useProfile = () => {
 
   // 🔹 Load on mount
   useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
+  const load = async () => {
+    await fetchProfile();
+  };
+  load();
+}, [fetchProfile]);
 
   // 🔹 Save / Update Profile
   const saveProfile = async (data) => {
@@ -62,10 +65,7 @@ export const useProfile = () => {
       setUploading(true);
       setError(null);
 
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await uploadResume(formData);
+      const res = await uploadResume(file);
       setProfile(res?.data || res);
 
       return { success: true };
