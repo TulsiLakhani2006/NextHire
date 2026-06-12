@@ -2,36 +2,46 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
 const candidateLinks = [
-  { icon: '🏠', label: 'Dashboard',    path: '/dashboard' },
-  { icon: '👤', label: 'My Profile',   path: '/profile/setup' },
-  { icon: '💼', label: 'Browse Jobs',  path: '/jobs' },
-  { icon: '📄', label: 'Applications', path: '/applications' },
-  { icon: '🔔', label: 'Alerts',       path: '/notifications' },
+  { icon: '🏠', label: 'Dashboard', path: '/dashboard' },
+  { icon: '👤', label: 'My Profile', path: '/profile/setup' },
+  { icon: '💼', label: 'Browse Jobs', path: '/jobs' },
+  { icon: '📑', label: 'My Applications', path: '/my-applications' },
+  { icon: '🔔', label: 'Alerts', path: '/notifications' },
 ]
+
 const recruiterLinks = [
-  { icon: '🏠', label: 'Dashboard',  path: '/dashboard' },
-  { icon: '📋', label: 'My Jobs',    path: '/recruiter/jobs' },
+  { icon: '🏠', label: 'Dashboard', path: '/dashboard' },
+  { icon: '📋', label: 'My Jobs', path: '/recruiter/jobs' },
   { icon: '➕', label: 'Post a Job', path: '/jobs/post' },
   { icon: '👥', label: 'Applicants', path: '/applicants' },
-  { icon: '📊', label: 'Analytics',  path: '/analytics' },
+  { icon: '📊', label: 'Analytics', path: '/analytics' },
 ]
+
 const adminLinks = [
   { icon: '🏠', label: 'Dashboard', path: '/dashboard' },
-  { icon: '👥', label: 'Users',     path: '/admin/users' },
-  { icon: '💼', label: 'All Jobs',  path: '/admin/jobs' },
+  { icon: '👥', label: 'Users', path: '/admin/users' },
+  { icon: '💼', label: 'All Jobs', path: '/admin/jobs' },
 ]
 
 export default function Sidebar() {
   const { auth, logout } = useAuth()
-  const navigate  = useNavigate()
-  const location  = useLocation()
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const links = auth?.role === 'RECRUITER' ? recruiterLinks
-              : auth?.role === 'ADMIN'     ? adminLinks
-              : candidateLinks
+  const links =
+    auth?.role === 'RECRUITER'
+      ? recruiterLinks
+      : auth?.role === 'ADMIN'
+      ? adminLinks
+      : candidateLinks
 
-  const initials = auth?.name
-    ?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
+  const initials =
+    auth?.name
+      ?.split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || '?'
 
   const isActive = (path) =>
     path === '/dashboard'
@@ -40,12 +50,16 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
+      <div
+        className="sidebar-logo"
+        onClick={() => navigate('/dashboard')}
+        style={{ cursor: 'pointer' }}
+      >
         ⚡ <span className="gradient-text">TalentAI</span>
       </div>
 
       <nav className="sidebar-nav">
-        {links.map(l => (
+        {links.map((l) => (
           <div
             key={l.path}
             className={`sidebar-link ${isActive(l.path) ? 'active' : ''}`}
@@ -65,7 +79,14 @@ export default function Sidebar() {
             <div className="user-role">{auth?.role?.toLowerCase()}</div>
           </div>
         </div>
-        <button className="logout-btn" onClick={() => { logout(); navigate('/') }}>
+
+        <button
+          className="logout-btn"
+          onClick={() => {
+            logout()
+            navigate('/')
+          }}
+        >
           Sign out
         </button>
       </div>

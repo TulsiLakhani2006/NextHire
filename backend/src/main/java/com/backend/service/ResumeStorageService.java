@@ -1,46 +1,62 @@
 package com.backend.service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
+import java.io.InputStream;
 
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * MVP: Stores PDF locally under /uploads/resumes/
- * Later: swap saveLocally() for an S3 upload call.
- */
+import com.mongodb.client.gridfs.model.GridFSFile;
+
 @Service
 public class ResumeStorageService {
 
-    // Base URL your Spring Boot serves static files from
-    @Value("${app.resume.base-url:http://localhost:8080/resumes/}")
+    @Autowired
+    private GridFsTemplate gridFsTemplate;
+
+    @Autowired
+    private GridFsOperations gridFsOperations;
+
+    @Value("${app.resume.base-url:http://localhost:8080/api/resume/}")
     private String baseUrl;
 
-    @Value("${app.resume.upload-dir:uploads/resumes}")
-    private String uploadDir;
-
+    // Store file in GridFS, return accessible URL
     public String store(MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new IllegalArgumentException("File is empty");
-
-        String contentType = file.getContentType();
-        if (!"application/pdf".equals(contentType)) {
+        if (!"application/pdf".equals(file.getContentType()))
             throw new IllegalArgumentException("Only PDF files are allowed");
-        }
 
-        // Create directory if absent
-        Path dirPath = Paths.get(uploadDir);
-        if (!Files.exists(dirPath)) Files.createDirectories(dirPath);
+        // Delete old file if same name exists (optional safety)
+        gridFsTemplate.delete(
+            new Query(Criteria.where("filename").is(file.getOriginalFilename()))
+        );
 
-        // Unique filename
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path filePath = dirPath.resolve(filename);
-        Files.copy(file.getInputStream(), filePath);
+        // Save to GridFS
+        ObjectId fileId = gridFsTemplate.store(
+            file.getInputStream(),
+            file.getOriginalFilename(),
+            file.getContentType()
+        );
 
-        return baseUrl + filename;   // public-accessible URL
+        // Return URL pointing to our new serve endpoint
+        return baseUrl + fileId.toString();
+    }
+
+    // Retrieve file stream by GridFS file ID
+    public GridFSFile findById(String fileId) {
+        return gridFsTemplate.findOne(
+            new Query(Criteria.where("_id").is(new ObjectId(fileId)))
+        );
+    }
+
+    public InputStream getResourceStream(GridFSFile gridFSFile) throws IOException {
+        return gridFsOperations.getResource(gridFSFile).getInputStream();
     }
 }

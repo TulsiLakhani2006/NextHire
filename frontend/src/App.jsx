@@ -9,6 +9,8 @@ import BrowseJobs    from './pages/BrowseJobs'
 import JobDetail     from './pages/JobDetail'
 import PostJob       from './pages/PostJob'
 import RecruiterJobs from './pages/RecruiterJobs'
+import MyApplications from './pages/MyApplications'
+import JobApplicants from './pages/JobApplicants'
 
 export default function App() {
   return (
@@ -44,7 +46,13 @@ export default function App() {
         <Route path="/recruiter/jobs" element={
           <ProtectedRoute allowedRoles={['RECRUITER']}><RecruiterJobs /></ProtectedRoute>
         }/>
+        <Route path="/my-applications" element={
+          <ProtectedRoute role="CANDIDATE"><MyApplications /></ProtectedRoute>
+        } />
 
+        <Route path="/jobs/:jobId/applicants" element={
+          <ProtectedRoute role="RECRUITER"><JobApplicants /></ProtectedRoute>
+        } />
         <Route path="/unauthorized" element={<div style={{padding:'2rem'}}><h2>Access denied.</h2></div>} />
       </Routes>
     </BrowserRouter>

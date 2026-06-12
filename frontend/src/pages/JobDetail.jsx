@@ -5,6 +5,7 @@ import { getJobById } from '../api/jobs'
 import { useAuth } from '../hooks/useAuth'
 import '../styles/jobs.css'
 
+
 function formatSalary(min, max) {
   const fmt = n => n >= 100000 ? `₹${(n/100000).toFixed(0)}L` : `₹${(n/1000).toFixed(0)}K`
   return min || max ? `${fmt(min)} – ${fmt(max)} / year` : 'Salary not disclosed'
