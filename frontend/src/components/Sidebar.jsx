@@ -1,11 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-
+import { useEffect, useState } from "react";
+import { getUnreadCount } from "../api/notifications";
 const candidateLinks = [
   { icon: '🏠', label: 'Dashboard',       path: '/dashboard' },
   { icon: '👤', label: 'My Profile',      path: '/profile/setup' },
   { icon: '💼', label: 'Browse Jobs',     path: '/jobs' },
-  { icon: '📄', label: 'Applications',    path: '/my-applications' },  // ← fixed
+  { icon: '📄', label: 'Applications',    path: '/my-applications' },
   { icon: '🔔', label: 'Notifications',   path: '/notifications' },
 ]
 const recruiterLinks = [
@@ -24,11 +25,24 @@ export default function Sidebar() {
   const { auth, logout } = useAuth()
   const navigate  = useNavigate()
   const location  = useLocation()
-
+  const [unreadCount, setUnreadCount] = useState(0);
   const links = auth?.role === 'RECRUITER' ? recruiterLinks
               : auth?.role === 'ADMIN'     ? adminLinks
               : candidateLinks
+  useEffect(() => {
+  const fetchCount = async () => {
+    try {
+      const count = await getUnreadCount();
+      setUnreadCount(count);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  fetchCount();
+  const interval = setInterval(fetchCount, 30000); // poll every 30s
+  return () => clearInterval(interval);
+}, []);
   const initials = auth?.name
     ?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?'
 
@@ -54,6 +68,9 @@ export default function Sidebar() {
           >
             <span className="link-icon">{l.icon}</span>
             {l.label}
+            {l.path === '/notifications' && unreadCount > 0 && (
+              <span className="badge">{unreadCount}</span>
+            )}
           </div>
         ))}
       </nav>

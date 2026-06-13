@@ -66,7 +66,9 @@ export const useProfile = () => {
       setError(null);
 
       const res = await uploadResume(file);
-      setProfile(res?.data || res);
+      // Merge returned resume data into existing profile to avoid overwriting
+      // fields (like `skills`) when the upload endpoint returns only partial data.
+      setProfile(prev => ({ ...(prev || {}), ...(res?.data || res) }));
 
       return { success: true };
 

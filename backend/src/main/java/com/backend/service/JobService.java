@@ -1,52 +1,64 @@
 package com.backend.service;
 
-import com.backend.dto.JobRequest;
-import com.backend.dto.JobResponse;
-import com.backend.model.*;
-import com.backend.repository.JobRepository;
-import com.backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.backend.dto.JobRequest;
+import com.backend.dto.JobResponse;
+import com.backend.model.Job;
+import com.backend.model.JobStatus;
+import com.backend.model.User;
+import com.backend.repository.JobRepository;
+import com.backend.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class JobService {
 
     private final JobRepository jobRepository;
-    private final UserRepository userRepository;
-
+private final UserRepository userRepository;
+private final NotificationService notificationService; 
     /* ── Create ── */
-    public JobResponse createJob(JobRequest req, String recruiterId) {
-        User recruiter = userRepository.findById(recruiterId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recruiter not found"));
+    /* ── Create ── */
+public JobResponse createJob(JobRequest req, String recruiterId) {
+    User recruiter = userRepository.findById(recruiterId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recruiter not found"));
 
-        Job job = Job.builder()
-                .title(req.getTitle())
-                .description(req.getDescription())
-                .requiredSkills(req.getRequiredSkills())
-                .minExperience(req.getMinExperience())
-                .maxExperience(req.getMaxExperience())
-                .location(req.getLocation())
-                .salaryMin(req.getSalaryMin())
-                .salaryMax(req.getSalaryMax())
-                .jobType(req.getJobType())
-                .companyName(req.getCompanyName())
-                .status(JobStatus.ACTIVE)
-                .postedBy(recruiterId)
-                .recruiterName(recruiter.getName())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+    Job job = Job.builder()
+            .title(req.getTitle())
+            .description(req.getDescription())
+            .requiredSkills(req.getRequiredSkills())
+            .minExperience(req.getMinExperience())
+            .maxExperience(req.getMaxExperience())
+            .location(req.getLocation())
+            .salaryMin(req.getSalaryMin())
+            .salaryMax(req.getSalaryMax())
+            .jobType(req.getJobType())
+            .companyName(req.getCompanyName())
+            .status(JobStatus.ACTIVE)
+            .postedBy(recruiterId)
+            .recruiterName(recruiter.getName())
+            .createdAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
+            .build();
 
-        return toResponse(jobRepository.save(job));
-    }
+    Job saved = jobRepository.save(job);
+
+    notificationService.notifyMatchingCandidates(saved);  // ADD THIS LINE
+
+    return toResponse(saved);
+}
 
     /* ── Read all (paginated) ── */
     public Page<JobResponse> getAllActiveJobs(int page, int size, String search) {

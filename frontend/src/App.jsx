@@ -11,7 +11,9 @@ import PostJob         from './pages/PostJob'
 import RecruiterJobs   from './pages/RecruiterJobs'
 import MyApplications  from './pages/MyApplications'
 import JobApplicants   from './pages/JobApplicants'
-
+import Analytics from "./pages/Analytics";
+import Notifications from "./pages/Notifications";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 export default function App() {
   return (
     <BrowserRouter>
@@ -60,6 +62,31 @@ export default function App() {
         <Route path="/unauthorized" element={
           <div style={{ padding: '2rem' }}><h2>Access denied.</h2></div>
         }/>
+        <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+        <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        }
+      />
+
+              <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute allowedRoles={['RECRUITER']}>
+            <Analytics />
+          </ProtectedRoute>
+        }
+      />
       </Routes>
     </BrowserRouter>
   )

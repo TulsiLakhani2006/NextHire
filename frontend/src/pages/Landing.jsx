@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../styles/landing.css'
-
+// Use emoji fallback for shield icon to avoid missing dependency
+// import { ShieldCheck } from 'lucide-react';
 const candidateSteps = [
   { num: '1', title: 'Create your profile', desc: 'Add your skills, experience, and preferences. Takes less than 5 minutes.' },
   { num: '2', title: 'Upload your resume', desc: 'Our AI parses it automatically and fills your profile in seconds.' },
@@ -56,6 +57,10 @@ export default function Landing() {
               </Link>
               <Link to="/login" className="btn-ghost" style={{fontSize:'15px'}}>
                 Already have an account?
+              </Link>
+              <Link to="/admin" className="navbar-admin-btn" title="Admin Dashboard">
+                <span role="img" aria-label="shield">🛡️</span>
+                <span>Admin</span>
               </Link>
             </div>
             <p className="hero-note">🔒 Free to use · No credit card required</p>
