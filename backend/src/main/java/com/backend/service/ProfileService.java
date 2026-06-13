@@ -5,8 +5,10 @@ import com.backend.dto.ProfileResponse;
 import com.backend.model.Profile;
 import com.backend.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -47,11 +49,11 @@ public class ProfileService {
     }
 
     // ---- Get profile by userId ----
-    public ProfileResponse getProfileByUserId(String userId) {
-        Profile profile = profileRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
-        return ProfileResponse.from(profile);
-    }
+   public ProfileResponse getProfileByUserId(String userId) {
+    Profile profile = profileRepository.findByUserId(userId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
+    return ProfileResponse.from(profile);
+}
 
     // ---- Get all profiles (recruiters) ----
     public List<ProfileResponse> getPublicProfiles() {

@@ -24,12 +24,13 @@ public class JwtUtil {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey())
-                .compact();
+       return Jwts.builder()
+        .subject(userDetails.getUsername())
+        .claim("role", userDetails.getAuthorities()) // 👈 ADD THIS
+        .issuedAt(new Date())
+        .expiration(new Date(System.currentTimeMillis() + expiration))
+        .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+        .compact();
     }
 
     public String extractUsername(String token) {

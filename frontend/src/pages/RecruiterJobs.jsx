@@ -41,12 +41,17 @@ export default function RecruiterJobs() {
 
   return (
     <DashboardLayout>
-      <div className="jobs-header" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:12 }}>
+      <div className="jobs-header" style={{
+        display: 'flex', justifyContent: 'space-between',
+        alignItems: 'flex-end', flexWrap: 'wrap', gap: 12
+      }}>
         <div>
           <h1>My Jobs</h1>
           <p>{active} active listing{active !== 1 ? 's' : ''} · {jobs.length} total</p>
         </div>
-        <button className="form-submit" onClick={() => navigate('/jobs/post')}>+ Post New Job</button>
+        <button className="form-submit" onClick={() => navigate('/jobs/post')}>
+          + Post New Job
+        </button>
       </div>
 
       {loading ? (
@@ -90,14 +95,23 @@ export default function RecruiterJobs() {
                   <td>{timeAgo(job.createdAt)}</td>
                   <td>
                     <div className="table-actions">
-                      <button className="action-btn primary"
+                      {/* View Applicants — Phase 4 */}
+                      <button
+                        className="action-btn primary"
+                        onClick={() => navigate(`/jobs/${job.id}/applicants`)}
+                      >
+                        👥 Applicants
+                      </button>
+                      <button className="action-btn"
                         onClick={() => navigate(`/jobs/${job.id}`)}>View</button>
                       <button className="action-btn"
                         onClick={() => navigate(`/jobs/${job.id}/edit`)}>Edit</button>
                       {job.status === 'ACTIVE' && (
-                        <button className="action-btn" onClick={() => handleClose(job.id)}>Close</button>
+                        <button className="action-btn"
+                          onClick={() => handleClose(job.id)}>Close</button>
                       )}
-                      <button className="action-btn danger" onClick={() => handleDelete(job.id)}>Delete</button>
+                      <button className="action-btn danger"
+                        onClick={() => handleDelete(job.id)}>Delete</button>
                     </div>
                   </td>
                 </tr>

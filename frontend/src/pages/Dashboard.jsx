@@ -2,24 +2,28 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import DashboardLayout from '../components/DashboardLayout'
-import { getMyJobs, getAllJobs } from '../api/jobs'
+ import { getMyJobs, getAllJobs } from '../api/jobs'
+import { getMyApplications, getRecruiterApplicantCount } from '../api/applications'
 
 export default function Dashboard() {
   const { auth }  = useAuth()
   const navigate  = useNavigate()
-  const [stats, setStats] = useState({ jobs: 0, total: 0 })
-
+const [stats, setStats] = useState({ jobs: 0, total: 0, applications: 0 })
   const isCandidate = auth?.role === 'CANDIDATE'
   const isRecruiter = auth?.role === 'RECRUITER'
 
-  useEffect(() => {
-    if (isRecruiter) {
-      getMyJobs().then(r => setStats({ jobs: r.data.filter(j=>j.status==='ACTIVE').length, total: r.data.length }))
-    }
-    if (isCandidate) {
-      getAllJobs(0, 1).then(r => setStats({ total: r.data.totalElements }))
-    }
-  }, [isRecruiter, isCandidate])
+ 
+
+useEffect(() => {
+  if (isRecruiter) {
+    getMyJobs().then(r => setStats(s => ({ ...s, jobs: r.data.filter(j=>j.status==='ACTIVE').length, total: r.data.length })))
+    getRecruiterApplicantCount().then(r => setStats(s => ({ ...s, applications: r.data })))
+  }
+  if (isCandidate) {
+    getAllJobs(0, 1).then(r => setStats(s => ({ ...s, total: r.data.totalElements })))
+    getMyApplications().then(r => setStats(s => ({ ...s, applications: r.data.filter(a => a.status !== 'WITHDRAWN').length })))
+  }
+}, [isRecruiter, isCandidate])
 
   return (
     <DashboardLayout>
@@ -52,8 +56,7 @@ export default function Dashboard() {
           </div>
           <div className="stat-card">
             <div className="stat-icon-wrap" style={{background:'#D1FAE5'}}>📄</div>
-            <div><div className="stat-num">0</div><div className="stat-label">Applications Sent</div></div>
-          </div>
+            <div className="stat-num">{stats.applications ?? 0}</div><div className="stat-label">Applications Sent</div></div>
           <div className="stat-card">
             <div className="stat-icon-wrap" style={{background:'#FEF3C7'}}>🎯</div>
             <div><div className="stat-num">—</div><div className="stat-label">Match Score</div></div>
@@ -66,7 +69,7 @@ export default function Dashboard() {
           </div>
           <div className="stat-card">
             <div className="stat-icon-wrap" style={{background:'#D1FAE5'}}>👥</div>
-            <div><div className="stat-num">0</div><div className="stat-label">Applicants</div></div>
+            <div><div className="stat-num">{stats.applications ?? 0}</div><div className="stat-label">Applicants</div></div>
           </div>
           <div className="stat-card">
             <div className="stat-icon-wrap" style={{background:'#FEF3C7'}}>📊</div>

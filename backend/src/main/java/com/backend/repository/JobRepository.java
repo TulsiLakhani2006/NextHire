@@ -11,4 +11,5 @@ public interface JobRepository extends MongoRepository<Job, String> {
     List<Job> findByPostedByOrderByCreatedAtDesc(String recruiterId);
     Page<Job> findByStatusAndTitleContainingIgnoreCase(
             JobStatus status, String title, Pageable pageable);
+    List<Job> findByPostedBy(String postedBy);
 }

@@ -1,26 +1,11 @@
-import axiosInstance from "./axiosInstance";
+import api from './axiosInstance'
 
-export const applyToJob = (jobId, coverLetter = "") => {
-  return axiosInstance.post("/applications", { jobId, coverLetter });
-};
+export const applyToJob          = (data)              => api.post('/applications', data)
+export const getMyApplications   = ()                  => api.get('/applications/me')
+export const checkApplied        = (jobId)             => api.get(`/applications/check/${jobId}`)
+export const getApplicants       = (jobId, page=0, size=20) =>
+  api.get(`/applications/jobs/${jobId}?page=${page}&size=${size}`)
+export const updateAppStatus     = (id, data)          => api.patch(`/applications/${id}`, data)
+export const withdrawApplication = (id)                => api.delete(`/applications/${id}`)
 
-export const getMyApplications = () => {
-  return axiosInstance.get("/applications/me");
-};
-
-export const withdrawApplication = (applicationId) => {
-  return axiosInstance.delete(`/applications/${applicationId}`);
-};
-
-export const getApplicantsForJob = (jobId, page = 0, size = 10) => {
-  return axiosInstance.get(`/jobs/${jobId}/applicants`, {
-    params: { page, size },
-  });
-};
-
-export const updateApplicationStatus = (applicationId, status, recruiterNotes) => {
-  return axiosInstance.patch(`/applications/${applicationId}`, {
-    status,
-    recruiterNotes,
-  });
-};
+export const getRecruiterApplicantCount = () => api.get('/applications/recruiter/count')

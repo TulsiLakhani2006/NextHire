@@ -44,9 +44,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/resume/**").permitAll()
                 .requestMatchers("/api/jobs/**").permitAll()   // ADD THIS
+                .requestMatchers("/error").permitAll()
                 .requestMatchers("/api/test/candidate").hasRole("CANDIDATE")
                 .requestMatchers("/api/test/recruiter").hasRole("RECRUITER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                
                 .anyRequest().authenticated()
             )
                 .authenticationProvider(authenticationProvider())

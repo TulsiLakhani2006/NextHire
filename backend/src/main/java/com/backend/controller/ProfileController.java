@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.dto.ProfileRequest;
+import com.backend.repository.UserRepository;
 import com.backend.dto.ProfileResponse;
 import com.backend.security.JwtUtil;
 import com.backend.service.ProfileService;
@@ -21,13 +22,15 @@ public class ProfileController {
     @Autowired private ProfileService profileService;
     @Autowired private ResumeStorageService resumeStorageService;
     @Autowired private JwtUtil jwtUtil;
+    @Autowired private UserRepository userRepository;   // add this
 
-    // Helper: extract userId from Bearer token
     private String extractUserId(String authHeader) {
         String token = authHeader.replace("Bearer ", "");
-        return jwtUtil.extractUsername(token); // returns email/userId
+        String email = jwtUtil.extractUsername(token);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"))
+                .getId();
     }
-
     // ---- PUT /api/profile  — create or update own profile ----
     @PutMapping
     @PreAuthorize("hasRole('CANDIDATE')")
