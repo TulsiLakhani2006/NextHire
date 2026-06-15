@@ -1,7 +1,7 @@
-import axios from 'axios'
+import api from './axiosInstance'
 
 export const registerUser = (data) =>
-  axios.post('/api/auth/register', data)
+  api.post('/auth/register', data)
 
 export const loginUser = (data) =>
-  axios.post('/api/auth/login', data)
+  api.post('/auth/login', data)
