@@ -58,10 +58,6 @@ export default function Landing() {
               <Link to="/login" className="btn-ghost" style={{fontSize:'15px'}}>
                 Already have an account?
               </Link>
-              <Link to="/admin" className="navbar-admin-btn" title="Admin Dashboard">
-                <span role="img" aria-label="shield">🛡️</span>
-                <span>Admin</span>
-              </Link>
             </div>
             <p className="hero-note">🔒 Free to use · No credit card required</p>
           </div>

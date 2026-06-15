@@ -14,6 +14,7 @@ import JobApplicants   from './pages/JobApplicants'
 import Analytics from "./pages/Analytics";
 import Notifications from "./pages/Notifications";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLogin from './pages/AdminLogin'
 export default function App() {
   return (
     <BrowserRouter>
@@ -23,7 +24,7 @@ export default function App() {
         <Route path="/landing" element={<Landing />} />
         <Route path="/login"   element={<Login />} />
         <Route path="/register" element={<Register />} />
-
+        <Route path="/admin-login" element={<AdminLogin />} />
         {/* Shared protected */}
         <Route path="/dashboard/*" element={
           <ProtectedRoute><Dashboard /></ProtectedRoute>

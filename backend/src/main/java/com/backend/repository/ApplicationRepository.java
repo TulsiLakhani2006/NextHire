@@ -11,11 +11,14 @@ import com.backend.model.Application;
 import com.backend.model.ApplicationStatus;
 
 public interface ApplicationRepository extends MongoRepository<Application, String> {
-    Optional<Application>       findByCandidateIdAndJobId(String candidateId, String jobId);
-    List<Application>           findByCandidateIdOrderByAppliedAtDesc(String candidateId);
-    Page<Application>           findByJobId(String jobId, Pageable pageable);
-    long                        countByJobId(String jobId);
-   Page<Application> findByJobIdAndStatusNot(String jobId, ApplicationStatus status, Pageable pageable);
-long countByJobIdAndStatusNot(String jobId, ApplicationStatus status);
-List<Application> findByJobIdIn(List<String> jobIds);
+
+    List<Application> findByJobIdIn(List<String> jobIds);
+
+    Optional<Application> findByCandidateIdAndJobId(String candidateId, String jobId);
+
+    List<Application> findByCandidateIdOrderByAppliedAtDesc(String candidateId);
+
+    Page<Application> findByJobIdAndStatusNot(String jobId, ApplicationStatus status, Pageable pageable);
+
+    long countByJobIdAndStatusNot(String jobId, ApplicationStatus status);
 }

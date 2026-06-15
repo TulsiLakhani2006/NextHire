@@ -1,9 +1,9 @@
 package com.backend.controller;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,59 +15,63 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.dto.AdminJobResponse;
 import com.backend.dto.AdminStatsResponse;
 import com.backend.dto.AdminUserResponse;
-import com.backend.dto.UpdateJobStatusRequest;
-import com.backend.dto.UpdateUserStatusRequest;
+import com.backend.dto.JobStatusRequest;
+import com.backend.dto.UserStatusRequest;
+import com.backend.model.JobStatus;
 import com.backend.service.AdminService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
 
     @GetMapping("/stats")
-    public AdminStatsResponse getStats() {
-        return adminService.getStats();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AdminStatsResponse> getStats() {
+        return ResponseEntity.ok(adminService.getStats());
     }
 
-    // ---- Users ----
-
     @GetMapping("/users")
-    public List<AdminUserResponse> getAllUsers() {
-        return adminService.getAllUsers();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<AdminUserResponse>> getAllUsers() {
+        return ResponseEntity.ok(adminService.getAllUsers());
     }
 
     @PatchMapping("/users/{id}/status")
-    public Map<String, String> updateUserStatus(@PathVariable String id,
-                                                  @RequestBody UpdateUserStatusRequest request) {
-        adminService.updateUserStatus(id, request.isActive());
-        return Map.of("status", "ok");
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> updateUserStatus(@PathVariable String id, @RequestBody UserStatusRequest req) {
+        adminService.updateUserStatus(id, req.getActive());
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/users/{id}")
-    public Map<String, String> deleteUser(@PathVariable String id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         adminService.deleteUser(id);
-        return Map.of("status", "deleted");
+        return ResponseEntity.noContent().build();
     }
 
-    // ---- Jobs ----
-
     @GetMapping("/jobs")
-    public List<AdminJobResponse> getAllJobs() {
-        return adminService.getAllJobs();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<AdminJobResponse>> getAllJobs() {
+        return ResponseEntity.ok(adminService.getAllJobs());
     }
 
     @PatchMapping("/jobs/{id}/status")
-    public Map<String, String> updateJobStatus(@PathVariable String id,
-                                                 @RequestBody UpdateJobStatusRequest request) {
-        adminService.updateJobStatus(id, request.getStatus());
-        return Map.of("status", "ok");
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> updateJobStatus(@PathVariable String id, @RequestBody JobStatusRequest req) {
+        adminService.updateJobStatus(id, JobStatus.valueOf(req.getStatus()));
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/jobs/{id}")
-    public Map<String, String> deleteJob(@PathVariable String id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteJob(@PathVariable String id) {
         adminService.deleteJob(id);
-        return Map.of("status", "deleted");
+        return ResponseEntity.noContent().build();
     }
 }
