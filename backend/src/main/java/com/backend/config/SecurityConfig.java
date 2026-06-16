@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/test/recruiter").hasRole("RECRUITER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/test-config").permitAll()
-                
+                .requestMatchers("/mongo-test").permitAll()
                 .anyRequest().authenticated()
             )
                 .authenticationProvider(authenticationProvider())

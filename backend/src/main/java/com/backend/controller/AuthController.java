@@ -116,4 +116,9 @@ public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
     public ResponseEntity<String> testRecruiter() {
         return ResponseEntity.ok("Hello, Recruiter!");
     }
+    @GetMapping("/mongo-test")
+public String mongoTest() {
+    userRepository.count();
+    return "Mongo OK";
+}
 }
