@@ -118,7 +118,12 @@ public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
     }
     @GetMapping("/mongo-test")
 public String mongoTest() {
-    userRepository.count();
-    return "Mongo OK";
+    try {
+        long count = userRepository.count();
+        return "Mongo OK. Users = " + count;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return e.toString();
+    }
 }
 }
