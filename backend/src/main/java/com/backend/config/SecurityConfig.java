@@ -61,7 +61,10 @@ public class SecurityConfig {
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOriginPatterns(List.of("*"));
+    config.setAllowedOrigins(List.of(
+    "http://localhost:5173",
+    "https://next-hire-xi-lemon.vercel.app"
+));
     config.setAllowedMethods(List.of("*"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);
